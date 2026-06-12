@@ -1,0 +1,43 @@
+import streamlit as st
+
+# --- Career database (simplified for demo) ---
+career_paths = {
+    "Cybersecurity": ["Networking", "Linux", "Ethical Hacking", "Nmap", "Wireshark"],
+    "Data Science": ["Python", "Statistics", "Machine Learning", "Pandas", "SQL"],
+    "Game Development": ["Python", "Procedural Generation", "Animation", "Unity", "AI Logic"],
+    "AI/ML Engineering": ["Python", "TensorFlow", "PyTorch", "Deep Learning", "NLP"],
+    "Web Development": ["HTML", "CSS", "JavaScript", "React", "Django"]
+}
+
+# --- Streamlit UI ---
+st.title("AI Career Guidance Tool")
+st.write("Get personalized career suggestions based on your skills and goals.")
+
+# User inputs
+name = st.text_input("Enter your name:")
+skills = st.text_area("List your skills (comma-separated):")
+goal = st.text_input("What is your career goal?")
+
+if st.button("Get Guidance"):
+    user_skills = [s.strip().lower() for s in skills.split(",")]
+
+    # Simple matching logic
+    recommendations = []
+    for career, required_skills in career_paths.items():
+        match_score = sum(1 for skill in user_skills if skill in [r.lower() for r in required_skills])
+        if match_score > 0:
+            recommendations.append((career, match_score))
+
+    # Sort by best match
+    recommendations.sort(key=lambda x: x[1], reverse=True)
+
+    if recommendations:
+        st.subheader(f"Hi {name}, here are your top career matches:")
+        for career, score in recommendations:
+            st.write(f"- **{career}** (matched {score} of your skills)")
+    else:
+        st.write("No strong matches found. Try adding more skills!")
+
+    # Placeholder for AI-powered suggestions
+    st.info("💡 Future upgrade: Integrate with an AI model to provide tailored learning paths, internships, and project ideas.")
+
